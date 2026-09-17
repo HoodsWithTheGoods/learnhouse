@@ -65,3 +65,30 @@ Status: local candidate complete.
 
 The remaining next event is a private LearnHouse instance or Cloud organization with scoped API access.
 No live connection, Adapa deployment, or learner trial has run.
+
+## Local preview — 17 September 2026
+
+The Director requested the app on Adapa after the local build.
+The exact code commit eecf3df57c3e43171c8751fa16fec12499b38ab2 now runs at http://localhost:8490/ on Adapa.
+The source is /home/hassa/dev/learnhouse-ilearning.
+The runtime record is /home/hassa/.local/share/learnhouse-preview/README.md.
+The app uses new PostgreSQL, Redis, and content volumes.
+Only the app publishes a host port, bound to 127.0.0.1.
+The containers do not restart automatically after a host restart.
+
+The API health, homepage, and login page returned HTTP 200.
+Chrome accepted the URL in its existing desktop session.
+The browser control endpoint returned HTTP 404, so no authenticated browser trial ran.
+No active AI provider or live workspace MCP connection is configured.
+
+The Director then requested the first curriculum draft and the app's compute needs.
+The content source is /home/leo/dev/book-knowledge/curriculum/agentic-systems-v0.1/.
+The work order is INI-2026-078-curriculum-draft.
+This is original draft content, not an import of the private Passion to Purpose curriculum.
+
+The draft now has six courses and 26 lessons, plus a private, unpublished native import archive.
+The source delivery record is /home/leo/dev/book-knowledge/curriculum/agentic-systems-v0.1/DELIVERY.md.
+The real import-analysis request returned HTTP 403 because administrator sign-in is required.
+No courses entered the app. Authenticated import, page review, and the learner trial remain pending.
+The compute note recommends 2 CPU cores, 4 GB RAM, and at least 20 GB SSD storage for a separate pilot server.
+The current near-idle observation does not establish learner capacity.
