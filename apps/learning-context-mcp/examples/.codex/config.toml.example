@@ -1,0 +1,17 @@
+# Copy this file to .codex/config.toml in the workspace that starts the MCP server.
+# Set LEARNING_CONTEXT_MCP_API_TOKEN in the host secret store or shell.
+# Do not put the API token in this file or in Git.
+
+[mcp_servers.learning_context]
+command = "npm"
+args = ["--prefix", "/absolute/path/to/learnhouse-ilearning/apps/learning-context-mcp", "run", "start"]
+startup_timeout_sec = 15
+tool_timeout_sec = 30
+
+[mcp_servers.learning_context.env]
+LEARNING_CONTEXT_MCP_BASE_URL = "https://learnhouse.example"
+LEARNING_CONTEXT_MCP_ORG_SLUG = "example-org"
+LEARNING_CONTEXT_MCP_USER_ID = "123"
+LEARNING_CONTEXT_MCP_COURSE_UUID = "course_example"
+LEARNING_CONTEXT_MCP_WORKSPACE_ROOT = "/absolute/path/to/learner-workspace"
+LEARNING_CONTEXT_MCP_CHECKPOINT_PATH = "learning-context.json"

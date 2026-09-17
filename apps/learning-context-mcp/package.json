@@ -1,0 +1,24 @@
+{
+  "name": "@learnhouse/learning-context-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A pinned, local STDIO MCP bridge between one LearnHouse learner and one workspace checkpoint.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "test": "tsx --test test/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "26.1.2",
+    "tsx": "4.23.12",
+    "typescript": "5.9.3"
+  }
+}

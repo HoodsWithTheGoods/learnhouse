@@ -1,0 +1,14 @@
+{
+  "schema_version": "workspace_checkpoint_v1",
+  "current_lesson": "Lesson 1: define the problem",
+  "status": "in_progress",
+  "goal": "Build one useful personal agent for a real weekly task.",
+  "artifact_summary": "The learner selected a weekly planning assistant and wrote its first task boundary.",
+  "artifact_revision": "draft-1",
+  "next_action": "Write three concrete inputs and one clear output for the agent.",
+  "open_questions": [
+    "Which weekly task causes the most friction?",
+    "What information must remain private in the workspace?"
+  ],
+  "updated_at": "2026-09-17T12:00:00Z"
+}

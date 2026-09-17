@@ -22,6 +22,7 @@ from src.services.ai.base import (
     save_message_to_history,
 )
 from src.services.ai.llm import model_for_tier
+from src.services.ai.learning_context import get_workspace_checkpoint_context
 
 from src.services.ai.schemas.ai import (
     ActivityAIChatSessionResponse,
@@ -34,6 +35,35 @@ from src.services.courses.activities.utils import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+async def _build_activity_chat_system_message(
+    course: CourseRead,
+    activity: ActivityRead,
+    current_user: PublicUser,
+    db_session: AsyncSession,
+) -> str:
+    """Build the tutor message with bounded learner-owned workspace context."""
+    message = "You are a helpful Education Assistant, and you are helping a student with the associated Course. "
+    message += "Use the course content provided to answer questions about the course material."
+    message += "For context, this is the Course name: "
+    message += course.name
+    message += " and this is the Lecture name: "
+    message += activity.name
+    message += "."
+    message += "Use your knowledge to help the student if the context is not enough."
+    try:
+        workspace_context = await get_workspace_checkpoint_context(
+            activity, current_user, db_session
+        )
+    except Exception:
+        # A checkpoint is optional context. Do not expose database details or
+        # block the course tutor if the optional reader is unavailable.
+        logger.warning("Workspace checkpoint context was unavailable")
+        workspace_context = None
+    if workspace_context:
+        message += workspace_context
+    return message
 
 
 async def _authorize_activity_ai_access(
@@ -181,14 +211,9 @@ async def ai_start_activity_chat_session(
 
     chat_session = get_chat_session_history()
 
-    message = "You are a helpful Education Assistant, and you are helping a student with the associated Course. "
-    message += "Use the course content provided to answer questions about the course material."
-    message += "For context, this is the Course name: "
-    message += course.name
-    message += " and this is the Lecture name: "
-    message += activity.name
-    message += "."
-    message += "Use your knowledge to help the student if the context is not enough."
+    message = await _build_activity_chat_system_message(
+        course, activity, current_user, db_session
+    )
 
     try:
         response = await ask_ai(
@@ -325,14 +350,9 @@ async def ai_send_activity_chat_message(
 
     chat_session = get_chat_session_history(chat_session_object.aichat_uuid)
 
-    message = "You are a helpful Education Assistant, and you are helping a student with the associated Course. "
-    message += "Use the course content provided to answer questions about the course material."
-    message += "For context, this is the Course name: "
-    message += course.name
-    message += " and this is the Lecture name: "
-    message += activity.name
-    message += "."
-    message += "Use your knowledge to help the student if the context is not enough."
+    message = await _build_activity_chat_system_message(
+        course, activity, current_user, db_session
+    )
 
     try:
         response = await ask_ai(
@@ -492,14 +512,9 @@ async def ai_start_activity_chat_session_stream(
     try:
         chat_session = get_chat_session_history()
 
-        message = "You are a helpful Education Assistant, and you are helping a student with the associated Course. "
-        message += "Use the course content provided to answer questions about the course material."
-        message += "For context, this is the Course name: "
-        message += course.name
-        message += " and this is the Lecture name: "
-        message += activity.name
-        message += "."
-        message += "Use your knowledge to help the student if the context is not enough."
+        message = await _build_activity_chat_system_message(
+            course, activity, current_user, db_session
+        )
     except Exception:
         refund_ai_credit(org.id)
         raise
@@ -541,14 +556,9 @@ async def ai_send_activity_chat_message_stream(
     try:
         chat_session = get_chat_session_history(chat_session_object.aichat_uuid)
 
-        message = "You are a helpful Education Assistant, and you are helping a student with the associated Course. "
-        message += "Use the course content provided to answer questions about the course material."
-        message += "For context, this is the Course name: "
-        message += course.name
-        message += " and this is the Lecture name: "
-        message += activity.name
-        message += "."
-        message += "Use your knowledge to help the student if the context is not enough."
+        message = await _build_activity_chat_system_message(
+            course, activity, current_user, db_session
+        )
     except Exception:
         refund_ai_credit(org.id)
         raise
